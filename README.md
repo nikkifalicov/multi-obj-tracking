@@ -10,7 +10,9 @@ Multi-object tracking library that's easy to use with Groundlight's Python SDK. 
 
 Groundlight created a platform to easily create custom-purpose Computer Vision models. The service allowed users to provide a query and upload images to easily obtain predictions. It included automatic model tuning and 24/7 data annotation by humans. While I worked at Groundlight, we encountered a problem: we needed to be able to accurately track multiple objects in real-time using the Groundlight platform. Groundlight already had support for running their models on-edge, but no pre-existing framework for instituting object tracking on top of the models.
 
-Thus, my main task was to construct a library that could perform multi-object tracking. Groundlight no longer has a free tier available to the public, so code that can still be run will be enumerated below.
+Thus, my main task was to construct a library that could perform multi-object tracking. `sort.py`, `tracker_base.py`, `tracker_interface.py`, `type_definitions.py`, `track.py`, and the mock SDK provider were not written by me, but I did collaborate on creating them. The other tracking algorithms, their unit tests, and evaluation functionality were created by me. 
+
+Groundlight no longer has a free tier available to the public, so code that can still be run will be enumerated below.
 
 ## Runnable Code
 Environment setup: Package management was done through [uv](https://docs.astral.sh/uv/). To get started,make sure you have the `uv` package manager installed. See installation instructions [here](https://docs.astral.sh/uv/getting-started/installation/).
