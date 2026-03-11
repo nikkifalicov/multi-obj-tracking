@@ -1,0 +1,87 @@
+[dependency-groups]
+dev = [
+    "ty>=0.0.1a9",
+    "pytest>=8.0.0",
+    "ruff>=0.11.13",
+    "toml-sort>=0.24.2",
+    "black>=25.1.0",
+    "pre-commit>=4.2.0",
+    "mypy>=1.16.0",
+    "pylint>=3.3.7",
+    "opencv-python>=4.11.0.86",
+    "parameterized>=0.9.0",
+    "ipdb>=0.13.13",
+    "imgcat>=0.6.0",
+    "motmetrics @ git+https://github.com/cheind/py-motmetrics.git@057504b5bc6c8e9b1ef336e76cb6adcfbd30f7b0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tracking"
+version = "0.1.0"
+description = "Object tracking library built for the Groundlight SDK"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "groundlight>=0.23.0",
+    "opencv-python>=4.11.0.86",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "trackers[reid,cu124] @ git+https://github.com/roboflow/trackers.git@d1897efd7b7347daed2f96e685fb117de300f43f",
+    "pandas>=2.3.1",
+]
+
+# toml-sort requires this empty section
+[tool.hatch]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tracking"]
+
+# allows us to reference a specific commit of 'tracking' that has functionality that wasn't available in the most recent PyPi release. Remove
+# when PyPi is updated to include ReID
+[tool.hatch.metadata]
+allow-direct-references = true
+
+# `tracking` relies on a prerelease version of `supervision`. this allows us to install and use it without having to add --prerelease=allow everywhere.
+[tool.uv]
+prerelease = "allow"
+python = "3.13"
+
+# https://docs.pytest.org/en/stable/reference/reference.html#ini-options-ref
+[tool.pytest]
+
+# https://docs.pytest.org/en/stable/reference/reference.html#confval-addopts
+[tool.pytest.ini_options]
+addopts = "--ignore=test/assets"
+testpaths = ["test"]
+markers = [
+    "needsgpu: mark test as requiring GPU hardware to run",
+    "wantsgpu: mark test as wanting GPU but can run without it. These tests will run on both CPU and GPU to verify they work in both cases.",
+]
+
+# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
+[tool.black]
+line-length = 120
+preview = true
+target-version = ["py39"]
+
+# https://mypy.readthedocs.io/en/stable/config_file.html
+[tool.mypy]
+ignore_missing_imports = true
+python_version = "3.9"
+
+# https://beta.ruff.rs/docs/configuration/#using-pyprojecttoml
+[tool.ruff]
+exclude = ["__init__.py"]
+line-length = 120
+target-version = "py39"
+lint.select = ["E", "F", "I", "N", "PL"] # shorthand names for plugins
+
+# https://toml-sort.readthedocs.io/en/latest/#configuration-file
+[tool.tomlsort]
+no_sort_tables = true
+spaces_indent_inline_array = 4
+trailing_comma_inline_array = true

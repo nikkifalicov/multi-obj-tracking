@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Formats the codebase.
+# Dependencies:
+# - uv
+# - toml-sort, ruff, black
+# Usage:
+# $ format src test bin
+
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 TARGET_PATHS"
+  exit 1
+fi
+
+# Args
+TARGET_PATHS=$@
+echo "Formatting paths: $TARGET_PATHS ..."
+
+# https://toml-sort.readthedocs.io/en/latest/
+echo "Running toml-sort formatter (pyproject.toml formatting) ..."
+uv run toml-sort -i pyproject.toml
+
+# https://beta.ruff.rs/docs/
+echo "Running ruff formatter (fixes some of the easier isort / flake8 / autoflake issues) ..."
+uv run ruff check $TARGET_PATHS
+uv run ruff format $TARGET_PATHS
+
+# https://black.readthedocs.io/en/stable/index.html
+echo "Running black formatter ..."
+uv run black $TARGET_PATHS
+
+echo "✅ Done!"
